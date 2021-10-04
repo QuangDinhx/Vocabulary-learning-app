@@ -1,2 +1,2 @@
-# Vocabulary-learning-app
-enjoy the app
+# Vocabulary-learning-web
+enjoy the web
