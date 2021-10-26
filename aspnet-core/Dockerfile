@@ -25,6 +25,10 @@ WORKDIR /app
 # Copy all files into inmage
 COPY . .
 
-RUN dotnet restore && cd src/Quizlet_Fake.DbMigrator; dotnet run; cd -
+RUN dotnet restore
+
+RUN cd src/Quizlet_Fake.DbMigrator; dotnet run; cd -
+
+EXPOSE 44340
 
 ENTRYPOINT [ "sh", "./run.sh" ]

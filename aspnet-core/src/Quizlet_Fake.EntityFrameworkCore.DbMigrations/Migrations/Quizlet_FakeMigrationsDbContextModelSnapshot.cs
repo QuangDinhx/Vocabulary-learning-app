@@ -68,6 +68,9 @@ namespace Quizlet_Fake.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("wordnumber")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("AppCourses");
@@ -109,6 +112,9 @@ namespace Quizlet_Fake.Migrations
 
                     b.Property<Guid?>("LastModifierId")
                         .HasColumnName("LastModifierId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LessonId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Level")
@@ -167,6 +173,9 @@ namespace Quizlet_Fake.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("wordnumber")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -336,7 +345,7 @@ namespace Quizlet_Fake.Migrations
                         .HasColumnName("CreatorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("EN")
+                    b.Property<string>("En")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ExtraProperties")
@@ -357,7 +366,7 @@ namespace Quizlet_Fake.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("VN")
+                    b.Property<string>("Vn")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
