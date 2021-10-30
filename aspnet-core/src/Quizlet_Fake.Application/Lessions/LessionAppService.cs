@@ -13,6 +13,9 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using System.Linq;
 using Quizlet_Fake.Participations;
+using Quizlet_Fake.Permissions;
+using Microsoft.AspNetCore.Mvc;
+using Quizlet_Fake.Managers;
 
 namespace Quizlet_Fake.Lessions
 {
@@ -26,49 +29,123 @@ namespace Quizlet_Fake.Lessions
          ILessionAppService, ITransientDependency
     {
         //public IAbpSession AbpSession { get; set; }
-        public LessionAppService(IRepository<Lesson, Guid> repository, ICurrentUser currentUser, IRepository<Course, Guid> repo,  IRepository<ParticipationPermission, Guid> x) : base(repository)
+        public LessionAppService(IRepository<Lesson, Guid> repository, ICurrentUser currentUser, IRepository<LessonInfoOfUser, Guid> leinfo, IRepository<Course, Guid> repo,  IRepository<ParticipationPermission, Guid> x) : base(repository)
         {
             this._currentUser = currentUser;
             this._repository = repository;
             this.courseRepo = x;
+            this._leinfo = leinfo;
+            GetListPolicyName = Quizlet_FakePermissions.Lesson.Default;
         }
         private readonly ICurrentUser _currentUser;
         private readonly IRepository<Lesson, Guid> _repository;
         private readonly IRepository<ParticipationPermission, Guid> courseRepo;
+        private readonly IRepository<LessonInfoOfUser, Guid> _leinfo;
         public override Task<LessionDto> CreateAsync(LessionCreateorUpdateDto input)
         {
-            var course = courseRepo.FirstOrDefault(x => x.CourseId == input.CourseId);
-            if(course.UserId == (Guid) _currentUser.Id)
+            var course = courseRepo.Where(x => x.CourseId == input.CourseId).Where(x => x.UserId == _currentUser.Id).FirstOrDefault();
+            if (course != null)
             {
-                return base.CreateAsync(input);
+
+                if (course.UserId == _currentUser.Id)
+                {
+                    return base.CreateAsync(input);
+                }
             }
             //input.UserId = AbpSession.UserId;
             return base.CreateAsync(new LessionCreateorUpdateDto());
         }
 
-        public List<Lesson> GetLessionOfCourses(Guid id)
+        public async Task <List<LessionDto>> GetLessionOfCourses(Guid id)
         {
             var lession = new List<Lesson>();
             Guid currentId = (Guid)_currentUser.Id;
-            var course = courseRepo.Where(x => x.CourseId == id).FirstOrDefault();
-            if(currentId == course.UserId)
+            var course = courseRepo.Where(x => x.CourseId == id &&  x.UserId == currentId).FirstOrDefault();
+            if (course != null)
             {
-                lession = _repository.Where(x => x.CourseId == id).ToList();
-                return lession;
+                var x = await courseRepo.GetAsync(course.Id);
+                if (x != null)
+                {
+                    // lession = _repository.Where(x => x.CourseId == id).ToList();
+                    // var y = ObjectMapper.Map<List<Lesson>, List<LessionDto>>(lession);
+                    //return y;
+
+                    var query = from lesson in _repository
+                                join lesinfo in _leinfo on lesson.Id equals lesinfo.LessonId into gj
+                                from sub in gj.DefaultIfEmpty()
+                                where lesson.CourseId == id
+                                select new { lesson, sub  };
+                    var queryResult = await AsyncExecuter.ToListAsync(query);
+
+                    var DTos = queryResult.Select(x =>
+                    {
+                        var dto = ObjectMapper.Map<Lesson, LessionDto>(x.lesson);
+                        
+                        dto.progress = 0;
+                        if( x.sub != null)
+                        {
+                            dto.progress = x.sub.Progress;
+                        }
+                        return dto;
+                    }).ToList();
+                    return new List<LessionDto>(DTos);
+
+                }
             }
+            var res = ObjectMapper.Map<List<Lesson>, List<LessionDto>>(lession);
+            return res;
+        }
 
+        public  List<LessionDto> GetListLessonOfUser(PagedAndSortedResultRequestDto input)
+        {
 
+            var lession = new List<LessionDto>();
+            HashSet<Lesson> s = new HashSet<Lesson>();
+            Guid currentId = (Guid)_currentUser.Id;
+            var course =  courseRepo.Where(x => x.UserId == currentId).ToList();
+            foreach ( var x in course)
+            {
+                var item = _repository.Where(m => m.CourseId == x.CourseId).First();
+                
+                s.Add(item);
+            }
+           foreach( Lesson f in s)
+            {
+                var insert = ObjectMapper.Map<Lesson, LessionDto>(f);
+                lession.Add(insert);
+            }
             return lession;
         }
 
-        public Task DeleteAsyncc(Guid id)
+        public override Task<LessionDto> GetAsync(Guid id)
+        {
+            var lesson = _repository.Where(x => x.Id == id).FirstOrDefault();
+            var course = courseRepo.Where(x => x.CourseId == lesson.CourseId).Where(x => x.UserId == _currentUser.Id).FirstOrDefault();
+            if (course != null)
+            {
+                return base.GetAsync(id);
+            }
+            return base.GetAsync(new Guid());
+        }
+        [HttpGet]
+        public bool isOwner(Guid id)
+        {
+            var lesson = _repository.Where(x => x.Id == id).FirstOrDefault();
+            return lesson.CreatorId == _currentUser.Id ? true : false;
+        }
+
+        public override Task DeleteAsync(Guid id)
         {
             
             var lesson = _repository.FirstOrDefault(x => x.Id == id);
             var course = courseRepo.FirstOrDefault(x => x.CourseId == lesson.CourseId);
-            if (course.UserId == _currentUser.Id)
+            if (course != null)
             {
-                return base.DeleteAsync(id);
+
+                if (course.UserId == _currentUser.Id)
+                {
+                    return base.DeleteAsync(id);
+                }
             }
             return base.DeleteAsync(new Guid());
 
@@ -79,9 +156,13 @@ namespace Quizlet_Fake.Lessions
 
             var lesson = _repository.FirstOrDefault(x => x.Id == id);
             var course = courseRepo.FirstOrDefault(x => x.CourseId == lesson.CourseId);
-            if (course.UserId == _currentUser.Id)
+            if (course != null)
             {
-                return base.UpdateAsync(id, input);
+
+                if (course.UserId == _currentUser.Id)
+                {
+                    return base.UpdateAsync(id, input);
+                }
             }
             return base.UpdateAsync(new Guid(), input);
         }
