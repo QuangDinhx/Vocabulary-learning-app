@@ -8,6 +8,7 @@ using Quizlet_Fake.Managers;
 using Quizlet_Fake.Participations;
 using Quizlet_Fake.Words;
 using Quizlet_Fake.Users;
+using Quizlet_Fake.Tags;
 
 namespace Quizlet_Fake.EntityFrameworkCore
 {
@@ -96,6 +97,14 @@ namespace Quizlet_Fake.EntityFrameworkCore
                 // ADD THE MAPPING FOR THE RELATION
                 b.HasOne<Lesson>().WithMany().HasForeignKey(x => x.LessonId).IsRequired();
                // b.HasOne<AppUser>().WithMany().HasForeignKey(x => x.UserId).IsRequired();
+
+            });
+
+            builder.Entity<Tag>(b =>
+            {
+                b.ToTable(Quizlet_FakeConsts.DbTablePrefix + "Tags", Quizlet_FakeConsts.DbSchema);
+                b.ConfigureByConvention(); 
+                
 
             });
         }

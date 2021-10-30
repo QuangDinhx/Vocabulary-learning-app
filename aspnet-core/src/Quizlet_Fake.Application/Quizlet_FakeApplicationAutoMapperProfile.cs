@@ -9,7 +9,7 @@ using Quizlet_Fake.Words;
 
 using Quizlet_Fake.Learns;
 using Quizlet_Fake.Managers;
-
+using Quizlet_Fake.Tags;
 
 namespace Quizlet_Fake
 {
@@ -43,6 +43,8 @@ namespace Quizlet_Fake
             CreateMap<Learn, LearnDto>();
             CreateMap<LearnCreateUpdateDto, Learn>();
 
+            CreateMap<TagCreateOrUpdate, Tag>();
+            CreateMap<Tag, TagDto>();
         }
     }
 }
