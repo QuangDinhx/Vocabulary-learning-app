@@ -12,7 +12,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./course.component.scss']
 })
 export class AllCourseComponent implements OnInit {
-  AllCourses: any[];
+  AllCourses: [];
   page = 1;
   pageSize = 5;
   checkRes: number;
@@ -30,7 +30,6 @@ export class AllCourseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.AllCourses = [];
     this.isSearch = false;
     // this.Service.getAllCourses().subscribe((data=>{
     //   this.AllCourses = data.items;
@@ -47,11 +46,9 @@ export class AllCourseComponent implements OnInit {
       this.orderPrice = 0;
     }
     this.Service.searchCourses(this.searchForm.controls.name.value, this.orderName, this.orderPrice).subscribe((data => {
-      this.AllCourses = [...data.items];
-      this.isSearch = true;
+      this.AllCourses = data.items;
     }));
-
-    console.log(this.AllCourses);
+    this.isSearch = true;
   }
 
   public check(id, name){

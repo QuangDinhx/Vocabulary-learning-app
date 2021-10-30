@@ -1,5 +1,7 @@
 FROM ubuntu:20.04
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get update && \
     apt-get -y upgrade && \
     apt-get -y install wget
@@ -23,7 +25,9 @@ WORKDIR /app
 # Copy all files into inmage
 COPY . .
 
-RUN dotnet restore && cd src/Quizlet_Fake.DbMigrator; dotnet run; cd -;
+RUN dotnet restore
+
+RUN cd src/Quizlet_Fake.DbMigrator; dotnet run; cd -
 
 EXPOSE 44340
 

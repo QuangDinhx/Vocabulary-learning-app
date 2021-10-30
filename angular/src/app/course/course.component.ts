@@ -3,7 +3,7 @@ import { ListService, PagedResultDto } from '@abp/ng.core';
 import { CourseService, CourseDto } from '@proxy/courses';
 import { query } from '@angular/animations';
 import { ServerHttpService } from '../CourseService/server-http.service';
-import { MatDialog } from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
@@ -18,17 +18,17 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class CourseComponent implements OnInit {
   courses: [];
-  constructor(public readonly list: ListService,
-    private Service: ServerHttpService,
-    private router: Router,
-    private dialog: MatDialog
-  ) {
+  constructor(public readonly list: ListService, 
+              private Service: ServerHttpService, 
+              private router: Router,
+              private dialog: MatDialog
+              ) {
   }
 
   ngOnInit(): void {
-    this.Service.getCourses().subscribe((data => {
+    this.Service.getCourses().subscribe((data =>{
       console.log(data);
-      this.courses = data.items;
+      this.courses = data;
     }))
   };
   public openDialog() {
@@ -40,7 +40,7 @@ export class CourseComponent implements OnInit {
     this.Service.idCourse = '';
     this.Service.name = '';
   }
-  public openDialogEdit(id, name, userId, publishDate, price, creationTime, creatorId) {
+  public openDialogEdit(id,name, userId, publishDate, price, creationTime, creatorId){
     this.dialog.open(CourseCreateComponent, {
       height: '400px',
       width: '500px',
@@ -54,8 +54,8 @@ export class CourseComponent implements OnInit {
     this.Service.creationTime = creationTime;
     this.Service.creatorId = creatorId;
   }
-  public deleteCourse(id) {
-    this.Service.deleteCourse(id).subscribe((data => {
+  public deleteCourse(id){
+    this.Service.deleteCourse(id).subscribe((data=>{
       console.log(data);
       location.reload();
     }))
@@ -74,50 +74,50 @@ export class CourseCreateComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private fb: FormBuilder,
-    private Service: ServerHttpService,
+    private Service: ServerHttpService, 
     private router: Router,
-  ) {
+    ) {
   }
-  ngOnInit() {
+  ngOnInit(){
     this.name = this.Service.name;
     this.form = this.fb.group({
-      name: this.name,
-      password: this.password
+     name: this.name,
+     password: this.password
     })
   }
   public closeDialog() {
     this.dialog.closeAll();
   }
-  public save() {
-    if (this.Service.addMode === false) {
+  public save(){
+    if (this.Service.addMode === false){
       this.name = this.form.controls.name.value;
       this.password = this.form.controls.password.value;
       this.Service.editCourse(
         {
-          "name": this.name,
+          "name" :this.name, 
           "password": this.password,
-          "userId": this.Service.userId,
-          "publishDate": this.Service.publishDate,
+          "userId" : this.Service.userId,
+          "publishDate" : this.Service.publishDate,
           "price": this.Service.price,
           "creationTime": this.Service.creationTime,
-          "creatorId": this.Service.creatorId
+          "creatorId" : this.Service.creatorId
         }, this.Service.idCourse
-      ).subscribe((data => {
+        ).subscribe((data=>{
         console.log(data);
         location.reload();
       }));
     } else {
-      this.name = this.form.controls.name.value;
-      this.password = this.form.controls.password.value;
-      this.Service.addCourse(
+    this.name = this.form.controls.name.value;
+    this.password = this.form.controls.password.value;
+    this.Service.addCourse(
         {
-          "name": this.name,
+          "name" :this.name,
           "password": this.password
         }
-      ).subscribe((data => {
+        ).subscribe((data =>{
         console.log(data);
         location.reload();
-      }));
+        }));
     }
   }
 
