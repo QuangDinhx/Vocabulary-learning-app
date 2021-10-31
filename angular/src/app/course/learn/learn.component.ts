@@ -122,14 +122,14 @@ export class LearnComponent implements OnInit {
     console.log('bam roi do ',a);
     if(this.currentes.arr[a].ans)
     {
-      alert('dung con me roi ');
+      alert('dung roi ');
       this.learnService.updateLevelLearningWordByIdwordAndB(this.currentes.ans.id,true).subscribe( data => {
        // console.log(data);
       });
       console.log('ca',this.currentes.ans.id);
     }
     else{
-      alert('sai con me roi ');
+      alert('sai roi ');
       this.learnService.updateLevelLearningWordByIdwordAndB(this.currentes.ans.id,false).subscribe( data => {
       });
     }
