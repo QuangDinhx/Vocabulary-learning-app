@@ -14,7 +14,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 export class AllCourseComponent implements OnInit {
   AllCourses: any[];
   page = 1;
-  pageSize = 5;
+  pageSize = 10;
   checkRes: number;
   searchForm: FormGroup;
   isSearch: boolean;
