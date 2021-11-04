@@ -1910,7 +1910,7 @@ C167.657,37.881,130.125,0.349,83.829,0.349z"></path>
                     *ngFor="let item of words"
                     >
                       <div class="SetPageTerm has-definitionText has-threeActions is-showing">
-                        <div class="SetPageTerm-inner">
+                        <div class="SetPageTerm-inner" (click)="open(item.name,item.vn,item.en)">
                           <div class="SetPageTerm-contentWrapper">
                             <div class="SetPageTerm-content">
                               <div class="SetPageTerm-side SetPageTerm-smallSide">
@@ -1971,3 +1971,5 @@ C167.657,37.881,130.125,0.349,83.829,0.349z"></path>
   </mat-card>
   
   </div>
+
+  

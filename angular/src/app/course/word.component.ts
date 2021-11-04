@@ -5,12 +5,17 @@ import { ServerHttpService } from '../WordService/server-http.service';
 import { ServerHttpService as LessonServe } from '../LessionService/server-http.service';
 import { WordService } from '@proxy/words';
 import { LessonInfoOfUserService } from '@proxy/managers';
+import { WordModalComponent} from './word-modal/word-modal.component'
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 
 @Component({
   selector: 'app-word',
   templateUrl: './word.component.html',
   styleUrls: ['./word.component.scss']
 })
+
+
 export class WordComponent implements OnInit {
   form: FormGroup;
   addMode = true;
@@ -27,7 +32,7 @@ export class WordComponent implements OnInit {
   isOwner: boolean;
   routerTest: string= "";
   constructor(private fb: FormBuilder,
-              
+    private modalService: NgbModal,
     private Service: ServerHttpService,
     private route: ActivatedRoute,
     private lessonSer: LessonServe,
@@ -146,4 +151,11 @@ export class WordComponent implements OnInit {
       en: this.en
     });
   }
+  open(name,vn,en) {
+    const modalRef = this.modalService.open(WordModalComponent);
+    modalRef.componentInstance.name = name;
+    modalRef.componentInstance.vn = vn;
+    modalRef.componentInstance.en = en;
+  }
+  
 }

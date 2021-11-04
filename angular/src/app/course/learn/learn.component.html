@@ -58,7 +58,7 @@
                   <div class="ProgressBar">
                     <div class="ProgressBar-progress" data-testid="ProgressBar-progress" style="width: 0%;"></div>
                   </div><span></span><span>
-                    <div class="MultipleChoiceQuestionPrompt">
+                    <div class="MultipleChoiceQuestionPrompt" *ngIf="state != 'done'">
                       <div class="ScrollableViewLayout">
                         <div class="ScrollableViewLayout-topBlur"></div>
                         <div class="ScrollableViewLayout-content">
@@ -68,7 +68,19 @@
                                 <div class="PromptTextWithImage" data-testid="question-prompt">
                                   <div class="FormattedTextWithImage">
                                     <div aria-label="thi hành" class="FormattedText notranslate lang-vi" style="font-size: 30px;">
-                                      <div style="display: block;">{{currentes.ans.name}}</div>
+                                      <div class="ShowAns" *ngIf="state==='unknow'">
+                                          {{currentes.ans.name}}
+                                      </div>
+                                      <div class="ShowAns" style="background-color: #74e946;" *ngIf="state==='true'">
+                                          <p>{{currentes.ans.name}}</p>
+                                          <i class="fas fa-check" style="margin-left: auto;"></i>
+
+                                      </div>
+                                      <div class="ShowAns" style="background-color: red;" *ngIf="state==='false'">
+                                          <p>{{currentes.ans.name}}</p>
+                                          <i class="fa fa-times" aria-hidden="true" style="margin-left: auto;"></i>
+                                      </div>
+                                      
                                     </div>
                                   </div>
                                 </div>
@@ -78,7 +90,7 @@
                               <div class="MultipleChoiceQuestionPrompt-termOptions">
                                 <div (click) = "bambne(0)"aria-label="tùy chọn 1, câu trả lời, Implement" class="MultipleChoiceQuestionPrompt-termOption" data-testid="option-1" role="button" tabindex="0">
                                   <div class="MultipleChoiceQuestionPrompt-keyboardHint">
-                                    <div class="UIKeyboardHint is-white"><span class="UIKeyboardHint-text is-white">1</span></div>
+                                    <div class="UIKeyboardHint is-white"><span class="UIKeyboardHint-text is-white"></span></div>
                                   </div>
                                   <div class="MultipleChoiceQuestionPrompt-termOptionInner">
                                     <div class="FormattedTextWithImage">
@@ -88,7 +100,7 @@
                                 </div>
                                 <div (click) = "bambne(1)" aria-label="tùy chọn 2, câu trả lời, efficient" class="MultipleChoiceQuestionPrompt-termOption" data-testid="option-2" role="button" tabindex="0">
                                   <div class="MultipleChoiceQuestionPrompt-keyboardHint">
-                                    <div class="UIKeyboardHint is-white"><span class="UIKeyboardHint-text is-white">2</span></div>
+                                    <div class="UIKeyboardHint is-white"><span class="UIKeyboardHint-text is-white"></span></div>
                                   </div>
                                   <div class="MultipleChoiceQuestionPrompt-termOptionInner">
                                     <div class="FormattedTextWithImage">
@@ -98,7 +110,7 @@
                                 </div>
                                 <div  (click) = "bambne(2)"aria-label="tùy chọn 3, câu trả lời, Prevail" class="MultipleChoiceQuestionPrompt-termOption" data-testid="option-3" role="button" tabindex="0">
                                   <div class="MultipleChoiceQuestionPrompt-keyboardHint">
-                                    <div class="UIKeyboardHint is-white"><span class="UIKeyboardHint-text is-white">3</span></div>
+                                    <div class="UIKeyboardHint is-white"><span class="UIKeyboardHint-text is-white"></span></div>
                                   </div>
                                   <div class="MultipleChoiceQuestionPrompt-termOptionInner">
                                     <div class="FormattedTextWithImage">
@@ -108,7 +120,7 @@
                                 </div>
                                 <div (click) = "bambne(3)" aria-label="tùy chọn 4, câu trả lời, Component" class="MultipleChoiceQuestionPrompt-termOption" data-testid="option-4" role="button" tabindex="0">
                                   <div class="MultipleChoiceQuestionPrompt-keyboardHint">
-                                    <div class="UIKeyboardHint is-white"><span class="UIKeyboardHint-text is-white">4</span></div>
+                                    <div class="UIKeyboardHint is-white"><span class="UIKeyboardHint-text is-white"></span></div>
                                   </div>
                                   <div class="MultipleChoiceQuestionPrompt-termOptionInner">
                                     <div class="FormattedTextWithImage">
@@ -122,6 +134,9 @@
                         </div>
                         <div class="ScrollableViewLayout-bottomBlur"></div>
                       </div>
+                    </div>
+                    <div class="MultipleChoiceQuestionPrompt" *ngIf="state === 'done'">
+                        <p style="margin: auto;text-align: center;">Bạn đã hoàn thành khóa học !</p>
                     </div>
                   </span><span></span>
                 </div>
@@ -147,7 +162,7 @@
       <div class="clr"></div>
     </div>
     <div class="popup_details"></div>
-    <div class="popup_powered">abc</div>
+    <div class="popup_powered"></div>
   </div>
   <div id="lbdictex_ask_mark" class="hidden" style="position: absolute; top: 0px; left: 0px;"><a class="lbdictex_ask_select" href="#">&nbsp;</a></div>
   
