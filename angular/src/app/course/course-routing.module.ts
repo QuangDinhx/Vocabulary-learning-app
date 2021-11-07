@@ -15,6 +15,7 @@ const routes: Routes =
   { path: 'course', component: CourseComponent},
   { path: '', component: AllCourseComponent},
   { path: 'course/:nameCourse/:idcourse', component: LessionComponent, canActivate: [AuthGuard]},
+  { path: ':nameCourse/:idcourse', component: LessionComponent, canActivate: [AuthGuard]},
   { path: 'course/:nameCourse/:idcourse/lession/:nameLession/:idLession', component: WordComponent, canActivate: [AuthGuard]},
   { path: 'course/:nameCourse/:idcourse/lession/:nameLession/:idLession', component: WordComponent,  canActivate: [AuthGuard]},
   { path: 'course/:nameCourse/:idcourse/lession/:nameLession/:idLession/learn', component: LearnComponent,  canActivate: [AuthGuard]},
