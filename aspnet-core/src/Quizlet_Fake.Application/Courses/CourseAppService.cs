@@ -3,6 +3,7 @@ using Quizlet_Fake.Lessons;
 using Quizlet_Fake.LogCoursesPermission;
 using Quizlet_Fake.Participations;
 using Quizlet_Fake.Permissions;
+using Quizlet_Fake.Tags;
 using Quizlet_Fake.Users;
 using System;
 using System.Collections.Generic;
@@ -27,13 +28,14 @@ namespace Quizlet_Fake.Courses
         ICourseAppService, ITransientDependency
     {
         //public IAbpSession AbpSession { get; set; }
-        public CourseAppService(IRepository<Course, Guid> repository ,ICurrentUser currentUser, IRepository<ParticipationPermission> y, IRepository<AppUser, Guid> z, IRepository<Lesson, Guid> m) : base(repository)
+        public CourseAppService(IRepository<Course, Guid> repository, ICurrentUser currentUser, IRepository<ParticipationPermission> y, IRepository<AppUser, Guid> z, IRepository<Tag> tag, IRepository<Lesson, Guid> m) : base(repository)
         {
             this._currentUser = currentUser;
             this._repository = repository;
             this._parRepo = y;
             this.usersRepository = z;
             this.lessonrepository = m;
+            this._Tagrepository = tag;
             GetPolicyName = Quizlet_FakePermissions.Courses.Default;
             GetListPolicyName = Quizlet_FakePermissions.Courses.Default;
         }
@@ -42,9 +44,10 @@ namespace Quizlet_Fake.Courses
         private readonly IRepository<ParticipationPermission> _parRepo;
         private readonly IRepository<AppUser, Guid> usersRepository;
         private readonly IRepository<Lesson, Guid> lessonrepository;
+        private readonly IRepository<Tag> _Tagrepository;
         public async override Task<CourseDto> CreateAsync(CourseCreateUpdateDto input)
         {
-            input.UserId =(Guid)  _currentUser.Id;
+            input.UserId = (Guid)_currentUser.Id;
             //input.UserId = AbpSession.UserId;
             var x = base.CreateAsync(input);
             var rs = await x;
@@ -56,9 +59,9 @@ namespace Quizlet_Fake.Courses
             return rs;
         }
 
-        
 
-        public  ListResultDto<CourseDto> GetCoursesOfUser (String? text)
+
+        public ListResultDto<CourseDto> GetCoursesOfUser(String? text)
         {
             var course = new List<Course>();
             var res = new List<CourseDto>();
@@ -66,22 +69,23 @@ namespace Quizlet_Fake.Courses
             if (text == null)
             {
 
-                 course = _repository.Where(p => p.UserId == id).ToList();
-                 res = ObjectMapper.Map<List<Course>, List<CourseDto>>(course);
+                course = _repository.Where(p => p.UserId == id).ToList();
+                res = ObjectMapper.Map<List<Course>, List<CourseDto>>(course);
             }
             else
             {
                 course = _repository.Where(p => p.UserId == id && p.Name.Contains(text)).ToList();
-                 res = ObjectMapper.Map<List<Course>, List<CourseDto>>(course);
+                res = ObjectMapper.Map<List<Course>, List<CourseDto>>(course);
             }
+            res = convertForAddingTag(res);
             return new ListResultDto<CourseDto>(res);
         }
-        public async Task<ListResultDto<CourseDto>> GetListssss(String? text, FilterCourseDto ?filterCourse)
+        public async Task<ListResultDto<CourseDto>> GetListssss(String? text, FilterCourseDto? filterCourse)
         {
             var query = from course in Repository
                         join
                 user in usersRepository on course.CreatorId equals user.Id
-                        
+
                         select new { course, user };
             if (text == null)
             {
@@ -117,14 +121,14 @@ namespace Quizlet_Fake.Courses
 
 
                     break;
-                    
+
                 case sortby.z_a:
                     courseDtos = courseDtos.OrderByDescending(o => o.CreationTime).ToList();
                     break;
                 default:
                     break;
-               
-                    
+
+
             }
 
             switch (filterCourse.Price)
@@ -138,9 +142,9 @@ namespace Quizlet_Fake.Courses
                     break;
             }
 
-         
 
 
+            courseDtos = convertForAddingTag(courseDtos);
             return new ListResultDto<CourseDto>(courseDtos);
 
         }
@@ -149,17 +153,17 @@ namespace Quizlet_Fake.Courses
         public Task Xoa(Guid id)
 
         {
-            var course =  _repository.FirstOrDefault(x =>x.Id == id);
+            var course = _repository.FirstOrDefault(x => x.Id == id);
             if (course.UserId == _currentUser.Id)
             {
-                return   base.DeleteAsync(id);
+                return base.DeleteAsync(id);
             }
             return base.DeleteAsync(new Guid());
-             
+
         }
         public override Task<CourseDto> UpdateAsync(Guid id, CourseCreateUpdateDto input)
         {
-            
+
 
             var course = _repository.FirstOrDefault(x => x.Id == id);
             if (course.UserId == _currentUser.Id)
@@ -171,5 +175,44 @@ namespace Quizlet_Fake.Courses
             return base.UpdateAsync(new Guid(), input);
         }
 
+
+        public TagDto GetTagbyId(int TagTd)
+        {
+
+            var tag = _Tagrepository.Where(x => x.TagId == TagTd).FirstOrDefault();
+
+            return ObjectMapper.Map<Tag, TagDto>(tag);
+        }
+
+        public List<TagDto> getListTagOfCourseFromString(String chuoi)
+        {
+
+
+            string[] strlist = chuoi.Split(',');
+
+            List<TagDto> rs = new List<TagDto>();
+
+
+            for (int i = 0; i < strlist.Count(); i++)
+            {
+                //GetTagbyId(Int32.Parse(strlist[i]))
+                rs.Add(GetTagbyId(Int32.Parse(strlist[i])));
+            }
+            return rs;
+        }
+
+        public List<CourseDto> convertForAddingTag(List<CourseDto> list) {
+
+
+            for (int i = 0; i < list.Count(); i++)
+            {
+                var course = _repository.First(x => x.Id == list[i].Id);
+
+                list[i].ListTag = getListTagOfCourseFromString(course.TagNames);
+            }
+            return list;
+        }
+
+        
     }
 }
