@@ -77,10 +77,10 @@ namespace Quizlet_Fake.Courses
                 course = _repository.Where(p => p.UserId == id && p.Name.Contains(text)).ToList();
                 res = ObjectMapper.Map<List<Course>, List<CourseDto>>(course);
             }
-            res = convertForAddingTag(res);
+           // res = convertForAddingTag(res,null);
             return new ListResultDto<CourseDto>(res);
         }
-        public async Task<ListResultDto<CourseDto>> GetListssss(String? text, FilterCourseDto? filterCourse)
+        public async Task<ListResultDto<CourseDto>> GetListssss(String? text, FilterCourseDto? filterCourse, String?  nameTags)
         {
             var query = from course in Repository
                         join
@@ -142,9 +142,9 @@ namespace Quizlet_Fake.Courses
                     break;
             }
 
+            
 
-
-            courseDtos = convertForAddingTag(courseDtos);
+           courseDtos = convertForAddingTag(courseDtos, nameTags);
             return new ListResultDto<CourseDto>(courseDtos);
 
         }
@@ -193,7 +193,7 @@ namespace Quizlet_Fake.Courses
             List<TagDto> rs = new List<TagDto>();
 
 
-            for (int i = 0; i < strlist.Count(); i++)
+           for (int i = 0; i < strlist.Count(); i++)
             {
                 //GetTagbyId(Int32.Parse(strlist[i]))
                 rs.Add(GetTagbyId(Int32.Parse(strlist[i])));
@@ -201,18 +201,58 @@ namespace Quizlet_Fake.Courses
             return rs;
         }
 
-        public List<CourseDto> convertForAddingTag(List<CourseDto> list) {
+        public List<CourseDto> convertForAddingTag(List<CourseDto> list, string tagNames) {
 
+            int count = list.Count();
 
-            for (int i = 0; i < list.Count(); i++)
+            if (tagNames == "" || tagNames == null)
             {
-                var course = _repository.First(x => x.Id == list[i].Id);
+                for (int i = 0; i < count; i++)
+                {
+                    var course = _repository.First(x => x.Id == list[i].Id);
 
-                list[i].ListTag = getListTagOfCourseFromString(course.TagNames);
+                    list[i].ListTag = getListTagOfCourseFromString(course.TagNames);
+                }
+                return list;
             }
-            return list;
+            else
+            {
+
+                var newlist = new List<CourseDto>();
+                for (int i = 0; i < count; i++)
+                {
+                    var course = _repository.First(x => x.Id == list[i].Id);
+
+                    if(checkListTag(tagNames,course.TagNames))
+                    {
+                        list[i].ListTag = getListTagOfCourseFromString(course.TagNames);
+                        newlist.Add(list[i]);
+                        
+                    }
+                }
+                return newlist;
+
+            }
+            
+            
         }
 
-        
+
+
+        public bool checkListTag(string filterTag, string courseTag)
+        {
+            String[] filterTagList = filterTag.Split(',');
+            String[] courseTagList = courseTag.Split(',');
+
+            for(int k = 0; k < filterTagList.Count(); k ++)
+            {
+                if(!courseTagList.Contains(filterTagList[k]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
