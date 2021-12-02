@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Router,ActivatedRoute } from '@angular/router';
 import { LearnService } from '@proxy/learns';
 import { LessionService } from '@proxy/lessions';
 import { Word, WordDto, WordService } from '@proxy/words';
 import { Words } from '@proxy';
+
 
 @Component({
   selector: 'app-learn',
@@ -19,10 +21,11 @@ export class LearnComponent implements OnInit {
   conlai : number ;
   currentes: testx;
   showans : false;
+  state:string;
   
   constructor(//public readonly list: ListService, 
    private learnService: LearnService, 
-    private wordService: WordService, 
+  private wordService: WordService, 
    private route: ActivatedRoute,
    private lessonService: LessionService,
    private router: Router,
@@ -31,19 +34,17 @@ export class LearnComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.state = "unknow";
     this.idlesson =  this.route.snapshot.params.idLession;
     this.wordService.getWordOfLessionById(this.idlesson).
     subscribe((data => {
      
       this.words = data;
-      console.log('ds',this.words);
      this.conlai = this.words.length;
-     console.log('word1',this.words);
      this.generateQuestion();
      this.currentes = this.test[0];
     // this.dapan1 =this.currentes.arr[0].word.en;
      //console.log('dap an 1',this.currentes.arr[0].word.en);
-     console.log('curren ', this.currentes);
     //console.log('test o trong',this.test);
     }));
     
@@ -63,8 +64,7 @@ export class LearnComponent implements OnInit {
       
       
      let tmp = this.words.slice();
-     tmp[index] = tmp[tmp.length -1]
-      console.log('t', tmp);
+     tmp[index] = tmp[tmp.length -1];
       let tmpindex : number = 0;
       
     
@@ -119,30 +119,36 @@ export class LearnComponent implements OnInit {
   bambne(a : number)
   {
     
-    console.log('bam roi do ',a);
+    console.log(this.state)
     if(this.currentes.arr[a].ans)
     {
-      alert('dung con me roi ');
+      alert('dung roi ');
+      this.state = "true";
       this.learnService.updateLevelLearningWordByIdwordAndB(this.currentes.ans.id,true).subscribe( data => {
        // console.log(data);
       });
-      console.log('ca',this.currentes.ans.id);
+      
     }
     else{
-      alert('sai con me roi ');
+      alert('sai roi ');
+      this.state = "false";
       this.learnService.updateLevelLearningWordByIdwordAndB(this.currentes.ans.id,false).subscribe( data => {
       });
     }
-
-    this.conlai -=1;
-    this.currentes = this.test[this.test.length -this.conlai ];
-    if(this.conlai == 0)
-    {
-      alert('Bạn đã hoàn thành bài học.')
-      let s  = this.router.url.substring(0, this.router.url.length - 5);
-      console.log('s',s);
-      this.router.navigate([s]);
-    }
+    setTimeout(()=>{
+      this.conlai -=1;
+      this.currentes = this.test[this.test.length -this.conlai ];
+      this.state = "unknow";
+      if(this.conlai == 0){
+        this.state = "done";
+        let s  = this.router.url.substring(0, this.router.url.length - 5);
+        setTimeout(()=>{
+          this.router.navigate([s]);
+        },2000)
+      }
+    },1000)
+    
+    
     }
   
 }
