@@ -4,6 +4,7 @@ using Quizlet_Fake.Learns;
 using Quizlet_Fake.Lessons;
 using Quizlet_Fake.Managers;
 using Quizlet_Fake.Participations;
+using Quizlet_Fake.Tags;
 using Quizlet_Fake.Users;
 using Quizlet_Fake.Words;
 using Volo.Abp.Data;
@@ -35,6 +36,9 @@ namespace Quizlet_Fake.EntityFrameworkCore
         public DbSet<Learn> Learns { get; set; }
         public DbSet<CourseInfoOfUser> CourseInfoOfUsers { get; set; }
         public DbSet<LessonInfoOfUser> LessonInfoOfUsers { get; set; }
+
+        public DbSet<Tag> Tags { get; set; }
+
 
 
         /* Add DbSet properties for your Aggregate Roots / Entities here.

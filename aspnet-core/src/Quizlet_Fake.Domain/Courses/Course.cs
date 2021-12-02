@@ -14,6 +14,8 @@ namespace Quizlet_Fake.Courses
         public DateTime PublishDate { get; set; }
         public float Price { get; set; }
 
+        public String TagNames { get; set; }
+
         public int wordnumber { get; set; } = 0;
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Quizlet_Fake.Tags;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Volo.Abp.Application.Dtos;
@@ -16,5 +17,7 @@ namespace Quizlet_Fake.Courses
         public DateTime PublishDate { get; set; }
         public int LessonNumber { get; set; }
         public float Price { get; set; }
+
+        public List<TagDto> ListTag { get; set; }
     }
 }
