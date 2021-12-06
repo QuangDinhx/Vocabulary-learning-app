@@ -211,7 +211,45 @@ namespace Quizlet_Fake.Learns
             _lessonrepository.UpdateAsync( oldlessonuser) ;
         }
 
-       
+
+        public async Task<List<LearnDto>> GetCurrentReview()
+        {
+            await CheckGetListPolicyAsync();
+
+            Guid myid = (Guid)_currentUser.Id;
+
+            var query = from word1 in _repository
+                        join word in _word_rea_repository on word1.WordId equals word.Id
+                        where word1.UserId == myid && word1.DateReview <= DateTime.Now
+                        orderby word1.Level
+                        select new { word1, word };
+            query = query.Skip(0).Take(100);
+            var queryResult = await AsyncExecuter.ToListAsync(query);
+
+            var DTos = queryResult.Select(x =>
+            {
+                var dto = ObjectMapper.Map<Learn, LearnDto>(x.word1);
+                dto.Vn = x.word.Vn;
+                dto.En = x.word.En;
+                dto.name = x.word.Name;
+                return dto;
+            }).ToList();
+            List<LearnDto> Llist = new List<LearnDto>(DTos);
+
+            int n = Llist.Count();
+            Random rng = new Random();
+            while (n > 1)
+
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                LearnDto value = Llist[k];
+                Llist[k] = Llist[n];
+                Llist[n] = value;
+            }
+            return Llist;
+        }
+
 
     }
 }

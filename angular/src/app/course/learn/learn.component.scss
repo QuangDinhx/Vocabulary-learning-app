@@ -166,7 +166,7 @@ body.theme-default{--mp_gray_color:var(--ui_color_gray_90_foreground);--mp_gray_
 @media screen and (max-width:38.75em){
 .ModeControls-modeName{font-weight:700;font-size:.75rem;letter-spacing:.1875rem;line-height:1.333333333333333;}
 }
-.ModeControls-modeName .UIModeIcon{margin-right:1.75rem;vertical-align:middle;}
+.ModeControls-modeName .UIModeIcon{margin-right:.75rem;vertical-align:middle;}
 .ModeControls-blurBottom,.ModeControls-blurTop{height:1.25rem;position:absolute;width:100%;}
 .ModeControls-blurTop{background:-webkit-linear-gradient(var(--card-alt-background),var(--card-alt-background-transparent));background:-moz-linear-gradient(var(--card-alt-background),var(--card-alt-background-transparent));background:-ms-linear-gradient(var(--card-alt-background),var(--card-alt-background-transparent));background:linear-gradient(var(--card-alt-background),var(--card-alt-background-transparent));z-index:1;top:100%;}
 .ModeControls-blurBottom{background:-webkit-linear-gradient(var(--card-alt-background-transparent),var(--card-alt-background));background:-moz-linear-gradient(var(--card-alt-background-transparent),var(--card-alt-background));background:-ms-linear-gradient(var(--card-alt-background-transparent),var(--card-alt-background));background:linear-gradient(var(--card-alt-background-transparent),var(--card-alt-background));bottom:100%;}
@@ -396,8 +396,3 @@ html{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-
 .UIModeIcon--small{display:inline-block;height:2.1875rem;width:2.1875rem;}
 .UIModeIcon-modeIcon{color:#3ccfcf;fill:var(--ui_color_primary_indigo_foreground);height:100%;width:100%;}
 /*! CSS Used fontfaces */
-.ShowAns {
-    display: flex;
-    padding: 2rem;
-    border-radius: 10px;
-}

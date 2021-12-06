@@ -1162,7 +1162,6 @@ a {
   padding: 1.25rem 2rem;
   position: relative;
   width: 100%;
-  border-radius: 0.25rem;
 }
 .SetPageTerm-inner:after,
 .SetPageTerm-inner:before {
@@ -4419,8 +4418,4 @@ html.cursor .UIButton--borderless:hover:visited {
   display: flex;
   align-items: center;
 }
-.SetPageTerm-inner:hover{
-  background-color: #3ccfcf;
-  box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
-  transform: translateY(-0.25em);
-}
+

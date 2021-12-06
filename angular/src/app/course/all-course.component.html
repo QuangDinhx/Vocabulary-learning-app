@@ -91,7 +91,7 @@
           class="SearchPage-result js-setResult"
           data-item-id="210854689"
           *ngFor="
-            let item of AllCourses | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize
+            let item of AllCourses | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
           "
           style="background-color: #ffffff"
         >
