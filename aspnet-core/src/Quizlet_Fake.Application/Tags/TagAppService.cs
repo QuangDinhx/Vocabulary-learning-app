@@ -41,14 +41,14 @@ namespace Quizlet_Fake.Tags
         {
             // var lastTag = _Tagrepository.LastOrDefault(); deo chay ???
 
-
-            var lastTag = _Tagrepository.OrderByDescending( p => p.TagId).First();
-            
-            if(lastTag != null)
+            if(_Tagrepository.ToList().Count() != 0)
             {
+                var lastTag = _Tagrepository.OrderByDescending(p => p.TagId).First();
                 return await base.CreateAsync(new TagCreateOrUpdate(lastTag.TagId + 1, input.Name));
-
             }
+           
+            
+            
             return await base.CreateAsync(new TagCreateOrUpdate(0, input.Name));
 
         }
