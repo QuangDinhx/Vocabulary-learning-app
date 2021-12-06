@@ -14,6 +14,42 @@
         <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
     </mat-form-field>
+    <div class="suggestTags" style="display:flex">
+        <div class="title" style="padding: 10px;">
+            Gợi ý:
+        </div>
+        <div class="tags-wrapper">
+            <div class="tag" *ngFor="let item of tags" (click)="addTagSuggest(item)"> 
+                    {{item.name}}
+            </div>
+        </div>
+    </div>
+    <div class="selectTags" style="display:flex">
+        <div class="title" style="padding: 10px;">
+            Tags:
+        </div>
+        <div class="tagsRightContent">
+            <div class="inputTags" style="display: flex; margin-bottom: 10px;">
+                <input type="text" #tagNameInput>
+                <div class="addIcon" (click)="addNewTags()">
+                    <i class="fas fa-plus"></i>
+                </div>
+            </div>
+            <div class="tags-container">
+                <div class="tags-wrapper">
+                    <div class="tag" *ngFor="let item of tagSelected"> 
+                        {{item.name}}
+                        <i class="fas fa-times" (click)="deleteTag(item)" style="margin-left: 10px;
+                        color: #2e8eff;
+                        font-size: 14px;
+                        cursor: pointer;"></i>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+    </div>
 </form>
 
 <mat-dialog-actions class="button_container">

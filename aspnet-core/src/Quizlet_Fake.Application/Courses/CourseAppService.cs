@@ -77,7 +77,9 @@ namespace Quizlet_Fake.Courses
                 course = _repository.Where(p => p.UserId == id && p.Name.Contains(text)).ToList();
                 res = ObjectMapper.Map<List<Course>, List<CourseDto>>(course);
             }
-           // res = convertForAddingTag(res,null);
+            // res = convertForAddingTag(res,null);
+            res = convertForAddingTag(res, "");
+
             return new ListResultDto<CourseDto>(res);
         }
         public async Task<ListResultDto<CourseDto>> GetListssss(String? text, FilterCourseDto? filterCourse, String?  nameTags)

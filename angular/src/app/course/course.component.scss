@@ -916,6 +916,7 @@ html.cursor .UILink:hover:visited {
 .UIRadio-label .UILink {
   position: relative;
 }
+
 .UIShimmer {
   background: var(--ui_shimmer_base_color);
   background-image: -webkit-linear-gradient(
@@ -1461,7 +1462,6 @@ mat-card:hover{
 }
 .search_field{
   padding: 10px;
-  max-width: 500px;
   margin-bottom: 50px;
 }
 .create_field:hover{
@@ -1532,4 +1532,64 @@ background: #c5f1f1;
 }
 .page {
 background: var(--ui_color_gray_90_background);
+}
+.tag2 {
+  background: #e5f1ff;
+  padding: 5px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  color: #2e3f59;
+  font-size: 12px;
+}
+.tag2:hover {
+  background: #95c3f5;
+}
+.tags-wrapper2{
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+}
+.tag {
+  background: #e5f1ff;
+  padding: 5px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  color: #2e3f59;
+  font-size: 12px;
+  cursor: pointer;
+}
+.tag:hover {
+  background: #95c3f5;
+}
+.tags-wrapper{
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+}
+.tags-container {
+  border: 1px solid #548bcf;
+  padding: 5px;
+  border-radius: 4px;
+  width: 372px;
+  height: 100px;
+}
+.addIcon {
+  background: #e5f1ff;
+  padding: 5px;
+  border-radius: 4px;
+  margin-left: 6px;
+  display: flex;
+  align-items: center;
+  color: #2e3f59;
+  font-size: 20px;
+  width: 27px;
+}
+.addIcon:hover {
+  background: #95c3f5;
 }

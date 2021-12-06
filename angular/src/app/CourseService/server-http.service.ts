@@ -27,6 +27,7 @@ export class ServerHttpService {
   public creatorId;
   public orderName;
   public orderPrice;
+  public listTag;
 
   public addMode = true;
   public getCourses(): Observable<any>{
@@ -35,8 +36,8 @@ export class ServerHttpService {
           .get<any>(url, httpOptions)
           .pipe(catchError(this.handleError));
   }
-  public searchCourses(text, orderName, orderPrice): Observable<any>{
-    const url = `${this.REST_API_SERVER}/ssss?text=`+ text + `&Sortby=` + orderName + `&Price=` + orderPrice;
+  public searchCourses(text, orderName, orderPrice,nameTags?): Observable<any>{
+    const url = `${this.REST_API_SERVER}/ssss?text=`+ text + `&Sortby=` + orderName + `&Price=` + orderPrice + `&nameTags=` + nameTags;
     return this.httpClient
           .get<any>(url, httpOptions)
           .pipe(catchError(this.handleError));
@@ -63,6 +64,18 @@ export class ServerHttpService {
     const url = `${this.REST_API_SERVER}/` + id;
     return  this.httpClient
             .put<any>(url, course)
+            .pipe(catchError(this.handleError));
+  }
+  public getSuggestTags(){
+    const url = `https://localhost:44340/api/app/tag` ;
+    return  this.httpClient
+            .get<any>(url, httpOptions)
+            .pipe(catchError(this.handleError));
+  }
+  public addNewTags(data) {
+    const url = `https://localhost:44340/api/app/tag`;
+    return  this.httpClient
+            .post<any>(url, data)
             .pipe(catchError(this.handleError));
   }
   constructor(private httpClient: HttpClient) { }

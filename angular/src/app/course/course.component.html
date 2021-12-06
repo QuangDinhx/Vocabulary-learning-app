@@ -2,7 +2,7 @@
 Create a Course
 </div>
 
-<div class="SearchPage-result js-setResult" data-item-id="210854689" *ngFor="let item of courses" style="background-color: #ffffff;">
+<div class="SearchPage-result js-setResult" data-item-id="210854689" *ngFor="let item of courses; let i = index" style="background-color: #ffffff;">
     <div class="SetPreviewLink">
       <div class="UILinkBox">
         <div class="UILinkBox-inner">
@@ -18,6 +18,12 @@ Create a Course
                 </div>
               </div>
               <header class="SetPreview-cardHeader"><span class="SetPreview-cardHeaderTitle">{{item.name}}</span></header>
+              <div class="tags-wrapper2" style="margin: 5px;">
+                <div class="title" style="margin-right: 10px;">Tags:</div>
+                <div class="tag2" *ngFor='let tag of item.listTag'> 
+                  {{tag ? tag.name :""}}
+                </div>
+              </div>
               <div class="SetPreviewLink-metadata">
                 <div class="SetPreviewLink-priceTag">
                   <h4 class="UIHeading UIHeading--four"></h4>
@@ -37,6 +43,7 @@ Create a Course
         item.publishDate,
         item.price,
         item.creationTime,
-        item.creatorId)">Edit</button>
+        item.creatorId,
+        item.listTag)">Edit</button>
      <button mat-button (click)="deleteCourse(item.id)">Delete</button>
   </div>

@@ -21,6 +21,9 @@ export class AllCourseComponent implements OnInit {
   orderName: number;
   orderPrice: number;
   pageOfItem: Array<any>;
+  nameTag ='';
+  tagSelected = [];
+  tags = [];
   constructor(private Service: ServerHttpService,
               private PermissionService: Permission,
               private dialog: MatDialog,
@@ -38,6 +41,9 @@ export class AllCourseComponent implements OnInit {
     this.searchForm = this.fb.group({
       name: ''
     });
+    
+    this.getSuggestTags();
+    this.search();
   }
   public search(){
     if(this.orderName === undefined) {
@@ -46,12 +52,55 @@ export class AllCourseComponent implements OnInit {
     if(this.orderPrice === undefined) {
       this.orderPrice = 0;
     }
-    this.Service.searchCourses(this.searchForm.controls.name.value, this.orderName, this.orderPrice).subscribe((data => {
+    let listTag = '';
+    if(this.tagSelected){
+      this.tagSelected.forEach((e,i)=>{
+        if(i == 0){
+          listTag = listTag + e.id;
+        }else{
+          listTag = listTag + "," + e.id;
+        }
+      })
+    }
+    
+    this.Service.searchCourses(this.searchForm.controls.name.value, this.orderName, this.orderPrice,listTag).subscribe((data => {
       this.AllCourses = [...data.items];
       this.isSearch = true;
     }));
 
     console.log(this.AllCourses);
+  }
+  public deleteTag(item){
+    if(this.tagSelected){
+      this.tagSelected.splice(this.tagSelected.findIndex(x => x == item), 1);
+      this.search()
+    }
+
+  }
+  public getSuggestTags(){
+    this.Service.getSuggestTags().subscribe((data) => {
+      if(data.items){
+        data.items.forEach(e => {
+          let item = {name:e.name,id:e.tagId}
+          if(this.tags.length < 8){
+            this.tags.push(item);
+          }
+        });
+      }
+    })
+  }
+
+  public addTagSuggest(item){
+    let isExist = false;
+    this.tagSelected.forEach((i)=>{
+      if(i.name == item.name){
+        isExist = true;
+      }
+    })
+    if(isExist == false){
+      this.tagSelected.push(item);
+      this.search()
+    }
   }
 
   public check(id, name){
@@ -72,16 +121,12 @@ export class AllCourseComponent implements OnInit {
 
   public changeOrdername(orderName) {
         this.orderName = orderName;
-        this.Service.searchCourses(this.searchForm.controls.name.value, this.orderName, this.orderPrice).subscribe((data => {
-          this.AllCourses = data.items;
-        }));
+        this.search()
   }
 
   public changeOrderprice(orderPrice) {
     this.orderPrice = orderPrice;
-    this.Service.searchCourses(this.searchForm.controls.name.value, this.orderName, this.orderPrice).subscribe((data => {
-      this.AllCourses = data.items;
-    }));
+    this.search()
 
 }
 
