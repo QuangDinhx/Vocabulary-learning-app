@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable, pipe } from 'rxjs';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { catchError } from 'rxjs/operators'; 
+import { environment } from 'src/environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -17,7 +18,7 @@ const httpOptions = {
 })
 
 export class ServerHttpService {
-  private REST_API_SERVER = 'https://localhost:44340/api/app/word';
+  private REST_API_SERVER =  environment.apis.default.url+'/api/app/word';
   public idLession = '';
 
   public addMode = true;

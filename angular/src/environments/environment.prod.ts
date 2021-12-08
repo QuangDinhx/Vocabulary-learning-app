@@ -1,7 +1,7 @@
 import { Config } from '@abp/ng.core';
 
 const baseUrl = 'http://localhost:4200';
-
+const apiUrl = 'https://localhost:44340';
 export const environment = {
   production: true,
   application: {
@@ -10,7 +10,7 @@ export const environment = {
     logoUrl: '',
   },
   oAuthConfig: {
-    issuer: 'https://localhost:44340',
+    issuer: apiUrl,
     redirectUri: baseUrl,
     clientId: 'Quizlet_Fake_App',
     responseType: 'code',
@@ -18,7 +18,7 @@ export const environment = {
   },
   apis: {
     default: {
-      url: 'https://localhost:44340',
+      url: apiUrl,
       rootNamespace: 'Quizlet_Fake',
     },
   },

@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable, pipe } from 'rxjs';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { catchError } from 'rxjs/operators'; 
+import { environment } from 'src/environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -17,7 +18,7 @@ const httpOptions = {
 })
 
 export class ServerHttpService {
-  private REST_API_SERVER = 'https://localhost:44340/api/app/course';
+  private REST_API_SERVER =  environment.apis.default.url+'/api/app/course';
   public idCourse = '';
   public name;
   public userId;
@@ -67,13 +68,13 @@ export class ServerHttpService {
             .pipe(catchError(this.handleError));
   }
   public getSuggestTags(){
-    const url = `https://localhost:44340/api/app/tag` ;
+    const url =  environment.apis.default.url+`/api/app/tag` ;
     return  this.httpClient
             .get<any>(url, httpOptions)
             .pipe(catchError(this.handleError));
   }
   public addNewTags(data) {
-    const url = `https://localhost:44340/api/app/tag`;
+    const url =  environment.apis.default.url+`/api/app/tag`;
     return  this.httpClient
             .post<any>(url, data)
             .pipe(catchError(this.handleError));

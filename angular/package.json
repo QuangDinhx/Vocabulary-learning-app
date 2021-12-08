@@ -29,6 +29,7 @@
     "@angular/router": "~10.1.2",
     "@ng-bootstrap/ng-bootstrap": "^8.0.0",
     "angular-bootstrap-md": "^10.0.0",
+    "dotenv": "^10.0.0",
     "jw-angular-pagination": "^1.2.0",
     "jw-paginate": "^1.0.4",
     "mdbootstrap": "^4.19.1",
