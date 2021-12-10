@@ -1,14 +1,7 @@
-import type { AuditedAggregateRoot } from '../volo/abp/domain/entities/auditing/models';
 import type { AuditedEntityDto } from '@abp/ng.core';
-
-export interface Course extends AuditedAggregateRoot<string> {
-  name: string;
-  password: string;
-  userId: string;
-  publishDate: string;
-  price: number;
-  wordnumber: number;
-}
+import type { TagDto } from '../tags/models';
+import type { sortby } from '../sortby.enum';
+import type { price } from '../price.enum';
 
 export interface CourseCreateUpdateDto {
   name: string;
@@ -16,12 +9,20 @@ export interface CourseCreateUpdateDto {
   publishDate: string;
   userId: string;
   price: number;
+  tagNames: string;
 }
 
 export interface CourseDto extends AuditedEntityDto<string> {
   name: string;
   userId: string;
+  authorName: string;
   publishDate: string;
+  lessonNumber: number;
   price: number;
-  wordnumber: number;
+  listTag: TagDto[];
+}
+
+export interface FilterCourseDto {
+  sortby: sortby;
+  price: price;
 }

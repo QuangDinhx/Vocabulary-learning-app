@@ -8,20 +8,21 @@ import { AuthGuard, PermissionGuard } from '@abp/ng.core';
 import { WordComponent } from './word.component';
 import { LearnComponent } from './learn/learn.component';
 import { TestComponent } from './test/test.component';
+import { CurrentReviewComponent } from './current-review/current-review.component';
 
 const routes: Routes =
 [
 
   { path: 'course', component: CourseComponent},
   { path: '', component: AllCourseComponent},
+  { path: 'currentReview', component: CurrentReviewComponent},
   { path: 'course/:nameCourse/:idcourse', component: LessionComponent, canActivate: [AuthGuard]},
   { path: ':nameCourse/:idcourse', component: LessionComponent, canActivate: [AuthGuard]},
   { path: 'course/:nameCourse/:idcourse/lession/:nameLession/:idLession', component: WordComponent, canActivate: [AuthGuard]},
   { path: ':nameCourse/:idcourse/lession/:nameLession/:idLession', component: WordComponent,  canActivate: [AuthGuard]},
+  { path: ':nameCourse/:idcourse/lession/:nameLession/:idLession/learn', component: LearnComponent,  canActivate: [AuthGuard]},
   { path: 'course/:nameCourse/:idcourse/lession/:nameLession/:idLession/learn', component: LearnComponent,  canActivate: [AuthGuard]},
   { path: ':nameCourse/:idcourse/test', component: TestComponent,  canActivate: [AuthGuard]}
-
-
 
 ];
 

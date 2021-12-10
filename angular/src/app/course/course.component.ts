@@ -187,7 +187,9 @@ export class CourseCreateComponent implements OnInit {
       }
     })
     if(isExist == false){
-      this.tagSelected.push(item);
+      if(this.tagSelected.length < 6){
+        this.tagSelected.push(item);
+      }
     }
   }
   public deleteTag(item){

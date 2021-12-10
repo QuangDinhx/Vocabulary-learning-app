@@ -20,6 +20,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {TestComponent} from'./test/test.component';
 import { WordModalComponent } from './word-modal/word-modal.component';
 import { LearnComponent } from './learn/learn.component';
+import { CurrentReviewComponent } from './current-review/current-review.component';
 
 
 
@@ -42,7 +43,7 @@ import { LearnComponent } from './learn/learn.component';
   ],
   declarations: [CourseComponent,CourseCreateComponent, LessionComponent, LessionCreateComponent, AllCourseComponent, WordComponent,TestComponent,
     CourseCheckPassComponent,
-    WordModalComponent,LearnComponent ]
+    WordModalComponent,LearnComponent, CurrentReviewComponent ]
   
 })
 export class CourseModule { }

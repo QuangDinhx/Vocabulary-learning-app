@@ -31,6 +31,13 @@ export class LearnService {
     },
     { apiName: this.apiName });
 
+  getCurrentReview = () =>
+    this.restService.request<any, LearnDto[]>({
+      method: 'GET',
+      url: `/api/app/learn/currentReview`,
+    },
+    { apiName: this.apiName });
+
   getList = (input: PagedAndSortedResultRequestDto) =>
     this.restService.request<any, PagedResultDto<LearnDto>>({
       method: 'GET',

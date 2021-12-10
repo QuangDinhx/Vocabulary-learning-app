@@ -189,18 +189,26 @@ namespace Quizlet_Fake.Courses
         public List<TagDto> getListTagOfCourseFromString(String chuoi)
         {
 
-
-            string[] strlist = chuoi.Split(',');
-
-            List<TagDto> rs = new List<TagDto>();
-
-
-           for (int i = 0; i < strlist.Count(); i++)
+            if (chuoi != null)
             {
-                //GetTagbyId(Int32.Parse(strlist[i]))
-                rs.Add(GetTagbyId(Int32.Parse(strlist[i])));
+
+                string[] strlist = chuoi.Split(',');
+
+                List<TagDto> rs = new List<TagDto>();
+
+
+                for (int i = 0; i < strlist.Count(); i++)
+                {
+                    //GetTagbyId(Int32.Parse(strlist[i]))
+                    rs.Add(GetTagbyId(Int32.Parse(strlist[i])));
+                }
+                return rs;
             }
-            return rs;
+            else
+            {
+
+            return new List<TagDto>();
+            }
         }
 
         public List<CourseDto> convertForAddingTag(List<CourseDto> list, string tagNames) {

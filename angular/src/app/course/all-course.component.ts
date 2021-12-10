@@ -98,8 +98,10 @@ export class AllCourseComponent implements OnInit {
       }
     })
     if(isExist == false){
-      this.tagSelected.push(item);
-      this.search()
+      if(this.tagSelected.length < 6){
+        this.tagSelected.push(item);
+        this.search()
+      }
     }
   }
 

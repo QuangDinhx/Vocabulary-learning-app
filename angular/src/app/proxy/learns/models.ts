@@ -19,6 +19,7 @@ export interface LearnDto extends AuditedEntityDto<string> {
   note: string;
   vn: string;
   en: string;
+  name: string;
 }
 
 export interface TestDto {

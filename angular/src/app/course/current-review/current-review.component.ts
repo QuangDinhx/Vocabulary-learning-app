@@ -2,26 +2,29 @@ import { Component, OnInit } from '@angular/core';
 
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Router,ActivatedRoute } from '@angular/router';
-import { LearnService } from '@proxy/learns';
+import { LearnDto, LearnService } from '@proxy/learns';
 import { LessionService } from '@proxy/lessions';
 import { Word, WordDto, WordService } from '@proxy/words';
 import { Words } from '@proxy';
-
+import type { PagedAndSortedResultRequestDto } from '@abp/ng.core';
 
 @Component({
-  selector: 'app-learn',
-  templateUrl: './learn.component.html',
-  styleUrls: ['./learn.component.scss']
+  selector: 'app-current-review',
+  templateUrl: './current-review.component.html',
+  styleUrls: ['./current-review.component.scss']
 })
-export class LearnComponent implements OnInit {
+export class CurrentReviewComponent implements OnInit {
   idlesson : any;
   test : Array<testx> = new Array();
-  words: Array<Word> = new Array();
+  words: Array<LearnDto> = new Array();
   currnumber : number  ;
   conlai : number ;
   currentes: testx;
   showans : false;
   state:string;
+  pageDto:PagedAndSortedResultRequestDto;
+
+  wordsForAnswers: Array<WordDto> = new Array();
   
   constructor(//public readonly list: ListService, 
    private learnService: LearnService, 
@@ -36,21 +39,39 @@ export class LearnComponent implements OnInit {
   ngOnInit(): void {
     this.state = "unknow";
     this.idlesson =  this.route.snapshot.params.idLession;
-    this.wordService.getWordOfLessionById(this.idlesson).
+    this.learnService.getCurrentReview().
     subscribe((data => {
      
       this.words = data;
-     this.conlai = this.words.length;
-     this.generateQuestion();
-     this.currentes = this.test[0];
-    // this.dapan1 =this.currentes.arr[0].word.en;
-     //console.log('dap an 1',this.currentes.arr[0].word.en);
-    //console.log('test o trong',this.test);
+      this.conlai = this.words.length;
+      if(this.conlai == 0){
+        this.state = "done";
+        let s  = this.router.url.substring(0, this.router.url.length - 13);
+        setTimeout(()=>{
+          this.router.navigate([s]).then(() => {
+            window.location.reload();
+          });
+          
+        },2000)
+      };
+      console.log(this.words);
+      this.pageDto = {
+        sorting:"0",
+        skipCount:0,
+        maxResultCount:100
+      }
+      this.wordService.getList(this.pageDto).subscribe(( data =>{
+        this.wordsForAnswers = data.items;
+        console.log('dung dep ',this.wordsForAnswers);
+        this.generateQuestion();
+        
+      }));
+      
     }));
     
     
-    //console.log('wrod2',this);
-   // console.log('test o ngoaif',this.test);
+    
+   
   }
   
   generateQuestion()
@@ -63,32 +84,38 @@ export class LearnComponent implements OnInit {
     this.words.forEach((value , index) => {
       
       
-     let tmp = this.words.slice();
-     tmp[index] = tmp[tmp.length -1];
+     let tmp = [...this.wordsForAnswers];
+
+     let dapan = this.wordsForAnswers.indexOf( this.wordsForAnswers.find(x => x.id == value.wordId));
+
+      tmp[dapan] = tmp[tmp.length -1];
       let tmpindex : number = 0;
       
     
       tmpindex = this.randomIntFromInterval(0,tmp.length-2);
+      console.log(tmpindex);
       let w1 = tmp[tmpindex];
       tmp[tmpindex] = tmp[tmp.length - 2];
       
       
       tmpindex = this.randomIntFromInterval(0,tmp.length-3);
+      console.log(tmpindex);
       let w2 = tmp[tmpindex];
       tmp[tmpindex] = tmp[tmp.length - 3];
       
       tmpindex = this.randomIntFromInterval(0,tmp.length-4);
+      console.log(tmpindex);
       let w3 = tmp[tmpindex];
       tmp[tmpindex] = tmp[tmp.length - 4];
       
       tmpindex = this.randomIntFromInterval(0,tmp.length-5);
+      console.log(tmpindex);
       let w4 = tmp[tmpindex];
       tmp[tmpindex] = tmp[tmp.length - 5];
       
       var object = {
         arr: [{
           word: w1, ans: false
-
         },{
           word: w2, ans: false
         },{
@@ -100,14 +127,17 @@ export class LearnComponent implements OnInit {
       };
       var x = this.randomIntFromInterval(0,3);
       object.arr[x].ans = true;
-      object.arr[x].word = value;
-      //console.log('ob',object);
+      object.arr[x].word.name = value.name;
+      object.arr[x].word.vn = value.vn;
+      object.arr[x].word.en = value.en;
+      object.arr[x].word.id = value.wordId;
+      console.log('ob',object);
       this.test.push(object);
      
     });
-
-    //this.currentes = this.test[0];
-    //console.log('curren ', this.currentes);
+    this.currentes = this.test[0];
+    //this.curentes = this.test[0];
+    console.log('curren ', this.currentes);
     //console.log('test',this.test);
     //console.log('ob23', this.test[0]);
    // console.log('ob',this.test);
@@ -123,14 +153,14 @@ export class LearnComponent implements OnInit {
     if(this.currentes.arr[a].ans)
     {
       this.state = "true";
-      this.learnService.updateLevelLearningWordByIdwordAndB(this.currentes.ans.id,true).subscribe( data => {
+      this.learnService.updateLevelLearningWordByIdwordAndB(this.currentes.ans.wordId,true).subscribe( data => {
        // console.log(data);
       });
       
     }
     else{
       this.state = "false";
-      this.learnService.updateLevelLearningWordByIdwordAndB(this.currentes.ans.id,false).subscribe( data => {
+      this.learnService.updateLevelLearningWordByIdwordAndB(this.currentes.ans.wordId,false).subscribe( data => {
       });
     }
     setTimeout(()=>{
@@ -139,9 +169,11 @@ export class LearnComponent implements OnInit {
       this.state = "unknow";
       if(this.conlai == 0){
         this.state = "done";
-        let s  = this.router.url.substring(0, this.router.url.length - 5);
+        let s  = this.router.url.substring(0, this.router.url.length - 13);
         setTimeout(()=>{
-          this.router.navigate([s]);
+          this.router.navigate([s]).then(() => {
+            window.location.reload();
+          });
         },2000)
       }
     },1000)
@@ -153,8 +185,8 @@ export class LearnComponent implements OnInit {
 class testx {
 
   arr: {
-    word: Word,
+    word: WordDto,
     ans: boolean
   }[] ;
-  ans: Word;
+  ans: LearnDto;
 }

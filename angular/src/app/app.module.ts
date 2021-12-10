@@ -18,6 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { CourseComponent } from './course/course.component';
+import { ReviewButtonComponent } from './review-button/review-button.component';
 
 
 @NgModule({
@@ -39,7 +40,7 @@ import { CourseComponent } from './course/course.component';
     MatDialogModule,
     MatFormFieldModule,
   ],
-  declarations: [AppComponent],
+  declarations: [AppComponent, ReviewButtonComponent],
   providers: [APP_ROUTE_PROVIDER],
   bootstrap: [AppComponent]
 })
